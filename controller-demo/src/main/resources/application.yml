@@ -1,0 +1,6 @@
+# 리졸브 설정
+spring:
+ mvc:
+  view:
+   prefix: /WEB-INF/views/
+   suffix: .jsp 
