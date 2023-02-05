@@ -2,6 +2,7 @@ package com.cos.photogramstart.web.dto.auth;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.cos.photogramstart.domain.user.User;
 
@@ -22,7 +23,8 @@ public class SignupDto {
 	 * 어떤 설정이 있을지는 구글링!
 	 * 예전에는 기본 기능이 였으나 현재는  의존성 추가 해줘야함
 	*/
-	@Max(20)
+	@Size(min = 2,max = 20)
+	@NotBlank
 	private String username;
 	@NotBlank
 	private String password;

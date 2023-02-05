@@ -12,8 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.photogramstart.domain.user.User;
+import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.service.AuthService;
 import com.cos.photogramstart.web.dto.auth.SignupDto;
 
@@ -69,23 +71,26 @@ public class AuthController {
 	*/
 	//회원 가입 버튼 -> /auth/signup->/auth/signin
 	@PostMapping("/auth/signup")
-	public String signup(@Valid SignupDto signupDto,BindingResult bindingResult) { // key=value (x-www=-form-urlencoded)
+//	public @ResponseBody  String signup(@Valid SignupDto signupDto,BindingResult bindingResult) {// @ResponseBody 가 붙으면 파일이 아닌 데이터 return// key=value (x-www=-form-urlencoded)
+	public  String signup(@Valid SignupDto signupDto,BindingResult bindingResult) {// @ResponseBody 가 붙으면 파일이 아닌 데이터 return// key=value (x-www=-form-urlencoded)
 		
 		if(bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
 			
 			for(FieldError error : bindingResult.getFieldErrors()) {
 				errorMap.put(error.getField(), error.getDefaultMessage());
-				System.out.print("===================="); 
-				System.out.print(error.getDefaultMessage()); 
+//				System.out.println("====================ㄴㄴ"); 
+//				System.out.println(error.getDefaultMessage()); 
 			}
+//			return "오류남";
+			throw new CustomValidationException("유효성 검사 실패함",errorMap);
+		}else {
+			log.info(signupDto.toString());
+			//User <- SignuoDto
+			User user = signupDto.toEntity();
+			User userEntity =  authService.회원가입(user);
+//			System.out.println(userEntity);
+			return "auth/signin"; // 회원가입이 성공하면 로그인 페이지로 이동
 		}
-		
-		log.info(signupDto.toString());
-		//User <- SignuoDto
-		User user = signupDto.toEntity();
-		User userEntity =  authService.회원가입(user);
-		System.out.println(userEntity);
-		return "auth/signin"; // 회원가입이 성공하면 로그인 페이지로 이동
 	}
 }
