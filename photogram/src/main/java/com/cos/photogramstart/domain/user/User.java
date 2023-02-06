@@ -42,7 +42,7 @@ public class User {
 	@Column(nullable = false)
 	private String name;
 	private String website; //웹 사이트 
-	private String bii; // 자기소개
+	private String bio; // 자기소개
 	@Column(nullable = false)
 	private String email;
 	private String phone;
