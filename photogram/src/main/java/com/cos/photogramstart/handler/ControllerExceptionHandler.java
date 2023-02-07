@@ -2,10 +2,13 @@ package com.cos.photogramstart.handler;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.util.Script;
 import com.cos.photogramstart.web.dto.CMRespDto;
@@ -42,4 +45,9 @@ public class ControllerExceptionHandler {
 		사용자가 직접 볼때는 Script 
 		다른 개발자(프론트)가 받을때는 CMResDTO
 	*/
+	
+	@ExceptionHandler(CustomValidationApiException.class) // RuntimeException이 발생하는 exception 다 가져옴
+	public ResponseEntity<CMRespDto<?>> validationApiException(CustomValidationApiException e){ //제너릭에 ? 를 넣으면 알아서 return 값이랑 맞춤
+		return new ResponseEntity<CMRespDto<?>>(new CMRespDto<>(-1,e.getMessage(),e.getErrorMap()),HttpStatus.BAD_REQUEST);
+	} 
 }
