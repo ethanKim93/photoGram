@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"mariaDB-18644c30c6a-3da2adeae51f807": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "photogram",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3309",
+				"database": "photogram",
+				"url": "jdbc:mariadb://localhost:3309/photogram",
+				"configurationType": "MANUAL",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 8.0",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}

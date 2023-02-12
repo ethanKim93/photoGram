@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.util.Script;
@@ -49,5 +50,10 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(CustomValidationApiException.class) // RuntimeException이 발생하는 exception 다 가져옴
 	public ResponseEntity<CMRespDto<?>> validationApiException(CustomValidationApiException e){ //제너릭에 ? 를 넣으면 알아서 return 값이랑 맞춤
 		return new ResponseEntity<CMRespDto<?>>(new CMRespDto<>(-1,e.getMessage(),e.getErrorMap()),HttpStatus.BAD_REQUEST);
+	}  
+	
+	@ExceptionHandler(CustomApiException.class) // RuntimeException이 발생하는 exception 다 가져옴
+	public ResponseEntity<CMRespDto<?>> validationApiException(CustomApiException e){ //제너릭에 ? 를 넣으면 알아서 return 값이랑 맞춤
+		return new ResponseEntity<CMRespDto<?>>(new CMRespDto<>(-1,e.getMessage(),null),HttpStatus.BAD_REQUEST);
 	} 
 }
