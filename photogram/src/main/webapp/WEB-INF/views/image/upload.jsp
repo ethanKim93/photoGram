@@ -13,7 +13,7 @@
                     <a href="home.html" class="">
                         <img src="/images/logo.jpg" alt="">
                     </a>
-                    <p>사진 업로드</p>
+                    <p>사진 업로드</p> 
                 </div>
                 <!--사진업로드 로고 end-->
                 
