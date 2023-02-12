@@ -30,15 +30,9 @@ public class UserApiController {
 
 	// update시 DB 만 바꾸지 말고 세션 정보도 함께 변경해줘야한다
 	@PutMapping("/api/user/{id}")
-	public CMRespDto<?> update(@PathVariable int id, @Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, // 꼭
-																														// Valid가
-																														// 적혀
-																														// 있는
-																														// 다음
-																														// 파라메터에
-																														// 적어야함.
+	public CMRespDto<?> update(@PathVariable int id, @Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, // 꼭Valid가/적혀있는다음파라메터에적어야함.
 			@AuthenticationPrincipal PrincipalDetails principalDetails) {
-
+		System.out.println("@@@test2@@@@");
 		if (bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
 

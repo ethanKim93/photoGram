@@ -18,9 +18,15 @@ function update(userId,event) {
 		dataType:"json"
 	}).done(res=>{ // HttpStatus 상태코드 200번대
 			console.log("update 성공",res);
-			locatuon.href = `/user/${userId}`;
+		location.href = `/user/${userId}`;
 	}).fail(error=>{  // HttpStatus 상태코드 200번대가 아닐때 
-		alert(error.responseJSON,data.name)
-		console.log("update 실패",data);
+		//alert(error.responseJSON,data.name)
+		//console.log("update 실패",data);
+		if(error.data == null){
+			alert(error.responseJSON.message);
+		}else{
+			alert(JSON.stringify(error.responseJSON.data));
+		}
+		
 	});
 }
