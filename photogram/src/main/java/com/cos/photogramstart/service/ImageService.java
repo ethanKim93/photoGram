@@ -41,5 +41,7 @@ public class ImageService {
 		// image 테이블 저장 
 		Image image = imageUploadDto.toEntity(imageFileName,principalDetails.getUser());
 		Image imageEntity = imageRepository.save(image);
+		
+//		System.out.println(imageEntity); //출력을 toString에서 하면 getter가 전부 실행됨. 
 	}
 }

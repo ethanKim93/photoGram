@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.photogramstart.handler.ex.CustomApiException;
+import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.util.Script;
@@ -37,14 +38,12 @@ public class ControllerExceptionHandler {
 	// 자바스크립트 사용 , 에러 화면 페이지 전환이 아니라 error 알림창만 발생하고 다시 회원가입 창으로 돌아옴
 	@ExceptionHandler(CustomValidationException.class) // RuntimeException이 발생하는 exception 다 가져옴
 	public String validationException(CustomValidationException e) { // 제너릭에 ? 를 넣으면 알아서 return 값이랑 맞춤
-		if(e.getErrorMap() == null) {
+		if (e.getErrorMap() == null) {
 			return Script.back(e.getMessage());
-		}else {
+		} else {
 			return Script.back(e.getMessage().toString());
 
 		}
-		
-		return Script.back(e.getErrorMap().toString());
 	}
 	/*
 	 * CMRespDto , Script 비교 1. 클라이언트에게 응답할때는 Script 좋음 2. Ajax 통신 - CMResDTO 3.
@@ -63,5 +62,10 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(CustomApiException.class) // RuntimeException이 발생하는 exception 다 가져옴
 	public ResponseEntity<CMRespDto<?>> validationApiException(CustomApiException e) { // 제너릭에 ? 를 넣으면 알아서 return 값이랑 맞춤
 		return new ResponseEntity<CMRespDto<?>>(new CMRespDto<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(CustomException.class) // RuntimeException이 발생하는 exception 다 가져옴
+	public String exception(CustomException e) { // 제너릭에 ? 를 넣으면 알아서 return 값이랑 맞춤
+		return Script.back(e.getMessage().toString());
 	}
 }
