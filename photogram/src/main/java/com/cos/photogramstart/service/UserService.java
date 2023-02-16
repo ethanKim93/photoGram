@@ -10,6 +10,7 @@ import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
 import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
+import com.cos.photogramstart.web.dto.user.UserProfileDto;
 import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -22,15 +23,19 @@ public class UserService {
 	private final BCryptPasswordEncoder bCyBCryptPasswordEncoder;
 	
 	@Transactional(readOnly = true)
-	public User 회원프로필(int uesrId) {
+	public UserProfileDto 회원프로필(int pageUserId,int principalId) {
+		
+		UserProfileDto dto = new UserProfileDto();
 		// SELECT * FROM image WHERE userId = :userId;
-		User userEntity = userRepository.findById(uesrId).orElseThrow(()->{
+		User userEntity = userRepository.findById(pageUserId).orElseThrow(()->{
 			throw new CustomException("해당 프로필 페이지는 없는 페이지 입니다.");
 		});
 //		System.out.println("===========");
 //		userEntity.getImages().get(0); // 양방향이 Lazy 전략이면 이때 select 쿼리로 조회함
-		
-		return userEntity; 
+		dto.setUser(userEntity);
+		dto.setPageOwnerState(pageUserId == principalId); // 1은 페이지 주인 , -1은 주인 아님  
+		dto.setImageCount(userEntity.getImages().size());
+		return dto; 
 	}
 	@Transactional // write니깐 사용
 	public User 회원수정(int id, User user) {

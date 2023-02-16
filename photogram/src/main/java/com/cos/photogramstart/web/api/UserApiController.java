@@ -32,7 +32,6 @@ public class UserApiController {
 	@PutMapping("/api/user/{id}")
 	public CMRespDto<?> update(@PathVariable int id, @Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, // 꼭Valid가/적혀있는다음파라메터에적어야함.
 			@AuthenticationPrincipal PrincipalDetails principalDetails) {
-		System.out.println("@@@test2@@@@");
 		if (bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
 
@@ -46,7 +45,7 @@ public class UserApiController {
 			System.out.println(userUpdateDto);
 			User userEntity = userService.회원수정(id, userUpdateDto.toEntity());
 			principalDetails.setUser(userEntity); // 세션정보 변경
-			return new CMRespDto<>(1, "회원수정완료", userEntity);
+			return new CMRespDto<>(1, "회원수정완료", userEntity); // 응답시에 userEntity의 모든 Getter 함수가 호출되고 JSON으로 파싱하여 응답한다.
 		}
 
 	}
