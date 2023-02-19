@@ -1,6 +1,7 @@
 package com.cos.photogramstart.web.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -25,7 +26,6 @@ import com.cos.photogramstart.web.dto.CMRespDto;
 import com.cos.photogramstart.web.dto.user.UserUpdateDto;
 import com.cos.photogramstart.web.dto.subscribe.SubscribeDto;
 
-import antlr.collections.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

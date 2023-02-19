@@ -2,8 +2,10 @@ package com.cos.photogramstart.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.qlrm.mapper.JpaResultMapper;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +21,13 @@ import lombok.RequiredArgsConstructor;
 public class SubscribeService {
 	
 	private final SubscribeRepository subscribeRepository;
-	private final EntityManager em; // Repository는 EntityManager를 구현해서 만들어져 있는 구현체
+	private final EntityManager em; // 모든 Repository는 EntityManager를 구현해서 만들어져 있는 구현체
 
 	@Transactional(readOnly = true)
 	public List<SubscribeDto> 구독리스트(int principalId, int pageUserId){
 		
-		// 쿼리 준비
+		// 쿼리 준비 //스칼라 쿼리를 사용 
+		// native 쿼리는 subscribe로만 반환하는데 , 해당 쿼리 결과가 subscribe 클래스가 아니기 때문에 native 사용 불가
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT u.id, u.username, u.profileImageUrl, ");
 		sb.append("if ((SELECT 1 FROM subscribe WHERE fromUserId = ? AND toUserId = u.id), 1, 0) subscribeState, ");
