@@ -22,9 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class ImageService {
-
 	
 	private final ImageRepository imageRepository;
+	
 	
 	@Transactional(readOnly = true)
 	public List<Image> 인기사진(){
@@ -32,32 +32,47 @@ public class ImageService {
 	}
 	
 	@Transactional(readOnly = true) // 영속성 컨텍스트 변경 감지를 해서, 더티체킹, flush(반영) X
-	public Page<Image> 이미지스토리(int principalId,Pageable pageable){
-		Page<Image> images = imageRepository.mStory(principalId,pageable);
+	public Page<Image> 이미지스토리(int principalId, Pageable pageable){
+		Page<Image> images = imageRepository.mStory(principalId, pageable);
+		
+		// 2(cos) 로그인 
+		// images에 좋아요 상태 담기
+		images.forEach((image)->{
+			
+			image.setLikeCount(image.getLikes().size());
+			
+			image.getLikes().forEach((like) -> {
+				if(like.getUser().getId() == principalId) { // 해당 이미지에 좋아요한 사람들을 찾아서 현재 로긴한 사람이 좋아요 한것인지 비교
+					image.setLikeState(true);
+				}
+			});
+			
+		});
+		
 		return images;
 	}
 	
 	
-	@Value("${file.path}") 
+	@Value("${file.path}")
 	private String uploadFolder;
 	
-	public void 사진업로드(ImageUploadDto imageUploadDto,PrincipalDetails principalDetails) {
-		UUID uuid = UUID.randomUUID();// 몇십억분의 1의 확률로 같은게 들어올수 있다.
-		String imageFileName = uuid +"_"+imageUploadDto.getFile().getOriginalFilename(); // 1.jpg
-		System.out.println("이미지 파일이름" + imageFileName);
+	@Transactional
+	public void 사진업로드(ImageUploadDto imageUploadDto, PrincipalDetails principalDetails) {
+		UUID uuid = UUID.randomUUID(); // uuid
+		String imageFileName = uuid+"_"+imageUploadDto.getFile().getOriginalFilename(); // 1.jpg
+		System.out.println("이미지 파일이름 : "+imageFileName);
+		
 		Path imageFilePath = Paths.get(uploadFolder+imageFileName);
 		
-		//통신 , I/O -> 예외가 발생할 수 가 있다. 컴파일시 잡아 낼수 없는 오류
+		// 통신, I/O -> 예외가 발생할 수 있다.
 		try {
 			Files.write(imageFilePath, imageUploadDto.getFile().getBytes());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		
-		// image 테이블 저장 
-		Image image = imageUploadDto.toEntity(imageFileName,principalDetails.getUser());
-		Image imageEntity = imageRepository.save(image);
-		
-//		System.out.println(imageEntity); //출력을 toString에서 하면 getter가 전부 실행됨. 
+		// image 테이블에 저장
+		Image image = imageUploadDto.toEntity(imageFileName, principalDetails.getUser()); // 5cf6237d-c404-43e5-836b-e55413ed0e49_bag.jpeg
+		imageRepository.save(image);
 	}
 }

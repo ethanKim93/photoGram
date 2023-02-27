@@ -9,14 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ImageRepository extends JpaRepository<Image, Integer> {
-	
-	//자동으로 페이징 되서 가져옴
-	@Query(value = "SELECT * FROM image WHERE userId IN (SELECT toUserId FROM subscribe WHERE fromUserId = :principalId) ORDER BY id DESC", nativeQuery = true)
-	Page<Image> mStory(@Param("principalId") int principalId, Pageable pageable);
-	
 
 	@Query(value = "SELECT * FROM image WHERE userId IN (SELECT toUserId FROM subscribe WHERE fromUserId = :principalId) ORDER BY id DESC", nativeQuery = true)
-	List<Image> mStory(@Param("principalId") int principalId);
+	Page<Image> mStory(@Param("principalId") int principalId, Pageable pageable);
 
 	@Query(value = "SELECT i.* FROM image i INNER JOIN (SELECT imageId, COUNT(imageId) likeCount FROM likes GROUP BY imageId) c ON i.id = c.imageId ORDER BY likeCount DESC", nativeQuery = true)
 	List<Image> mPopular();

@@ -13,7 +13,6 @@ public class SubscribeDto {
 	private int id;
 	private String username;
 	private String profileImageUrl;
-	// Maria Db가 int를 못받아서 Integer로 함
 	private Integer subscribeState;
 	private Integer equalUserState;
-} 
+}

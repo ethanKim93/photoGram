@@ -2,7 +2,7 @@ package com.cos.photogramstart;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-//test 용 코드 //사용 x
+
 //@Controller
 public class ViewControllerTest {
 
